@@ -1,6 +1,6 @@
 /* Service worker della versione web: l'app si apre anche senza rete.
    Prima la rete (così gli aggiornamenti arrivano subito), poi la copia salvata. */
-const CACHE = 'fdv-0-mv49y5lg';
+const CACHE = 'fdv-0-mv4a16jp';
 self.addEventListener('install', (e) => { self.skipWaiting(); });
 self.addEventListener('activate', (e) => {
   e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));

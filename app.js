@@ -810,6 +810,7 @@
   /* ---------- lista condivisa ---------- */
   const SY = window.FDV_SYNC;
   const dlg = $('#dlg');
+  const WEB_LINK = 'https://eyecontrol.github.io/film-da-vedere-web/';
   const stText = { ok: 'Collegata: le modifiche arrivano subito', offline: 'Senza rete: si aggiorna appena torna', off: '', missing: '' };
   function syncBadge() { $('#sync-btn').dataset.s = SY.loggedIn ? SY.state.state : 'off'; }
   function closeDlg() { dlg.classList.remove('on'); $('#d-scrim').classList.remove('on'); }
@@ -822,16 +823,20 @@
         <form class="row" id="d-form"><input id="d-mail" type="email" placeholder="Email" autocomplete="username" autocapitalize="off" spellcheck="false" aria-label="Email" required>
         <input id="d-pass" type="password" placeholder="Password" autocomplete="current-password" aria-label="Password" required>
         <div class="st" id="d-err" role="alert"></div>
-        <button class="pill gold" type="submit">Accedi</button><button class="ghost" type="button" data-d="close">Più tardi</button></form>`;
+        <button class="pill gold" type="submit">Accedi</button><button class="pill" type="button" data-d="share">Condividi l'app con lei</button><button class="ghost" type="button" data-d="close">Più tardi</button></form>`;
     } else {
       h = `<h2>Lista condivisa</h2><div class="st">${esc(stText[SY.state.state] || '')}</div><p>Collegato come <b>${esc(SY.email)}</b>. Le aggiunte, i “visti” e le cancellazioni arrivano sull'altro telefono.</p>
-        <div class="row"><button class="pill" data-d="close">Fatto</button><button class="ghost" data-d="leave">Esci</button></div>`;
+        <div class="row"><button class="pill gold" data-d="share">Condividi l'app con lei</button><button class="pill" data-d="close">Fatto</button><button class="ghost" data-d="leave">Esci</button></div>`;
     }
     dlg.innerHTML = h; dlg.classList.add('on'); $('#d-scrim').classList.add('on');
   }
-  dlg.addEventListener('click', (e) => {
+  dlg.addEventListener('click', async (e) => {
     const b = e.target.closest('[data-d]'); if (!b) return;
     if (b.dataset.d === 'close') closeDlg();
+    if (b.dataset.d === 'share') {
+      try { if (navigator.share) { await navigator.share({ title: 'Film da vedere', text: 'La nostra lista di film da vedere in due:', url: WEB_LINK }); return; } } catch (err) { if (err && err.name === 'AbortError') return; }
+      try { await navigator.clipboard.writeText(WEB_LINK); toast('Link copiato: incollalo in un messaggio'); } catch (err) { toast(WEB_LINK); }
+    }
     if (b.dataset.d === 'leave') { SY.logout(); syncBadge(); closeDlg(); toast('Disconnesso: la lista resta su questo telefono'); }
   });
   dlg.addEventListener('submit', async (e) => {
