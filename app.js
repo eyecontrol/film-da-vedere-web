@@ -802,6 +802,8 @@
     i.classList.add('open'); openCurtain();
     await wait(2900); i.classList.add('gone'); await wait(700);
     i.hidden = true;
+    // senza accesso la lista resta solo su questo telefono: si chiede subito di accedere
+    if (SY.available && !SY.loggedIn) openDlg();
   }
   $('#enter').onclick = enter;
 
@@ -820,7 +822,7 @@
         <form class="row" id="d-form"><input id="d-mail" type="email" placeholder="Email" autocomplete="username" autocapitalize="off" spellcheck="false" aria-label="Email" required>
         <input id="d-pass" type="password" placeholder="Password" autocomplete="current-password" aria-label="Password" required>
         <div class="st" id="d-err" role="alert"></div>
-        <button class="pill gold" type="submit">Accedi</button><button class="ghost" type="button" data-d="close">Annulla</button></form>`;
+        <button class="pill gold" type="submit">Accedi</button><button class="ghost" type="button" data-d="close">Più tardi</button></form>`;
     } else {
       h = `<h2>Lista condivisa</h2><div class="st">${esc(stText[SY.state.state] || '')}</div><p>Collegato come <b>${esc(SY.email)}</b>. Le aggiunte, i “visti” e le cancellazioni arrivano sull'altro telefono.</p>
         <div class="row"><button class="pill" data-d="close">Fatto</button><button class="ghost" data-d="leave">Esci</button></div>`;

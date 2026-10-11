@@ -7,4 +7,4 @@ window.FDV_SYNC_URL = [
   'https://realtime-cinema-default-rtdb.europe-west1.firebasedatabase.app',
   'https://realtime-cinema-default-rtdb.asia-southeast1.firebasedatabase.app',
 ];
-window.FDV_SYNC_KEY = '';
+window.FDV_SYNC_KEY = 'AIzaSyD2MGeGZ7N_qI7Umu4ijvPoQv6U6ikFjeQ';
