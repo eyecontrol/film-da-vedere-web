@@ -671,7 +671,9 @@
       [...h.children].forEach((st, k) => {
         const kin = left ? k : STRIPS - 1 - k; // 0 = bordo esterno, STRIPS-1 = bordo centrale
         const fromEdge = left ? st.offsetLeft : hw - st.offsetLeft - st.offsetWidth;
-        const D = fromEdge * .86 * sg, f = kin / (STRIPS - 1), amp = 2.2 + 3.2 * f;
+        const f = kin / (STRIPS - 1), amp = 2.2 + 3.2 * f;
+        // ogni striscia scivola via del tutto oltre il bordo dello schermo, invece di raccogliersi ai lati
+        const D = (fromEdge + st.offsetWidth + 24) * sg;
         const tr = (p, sk) => `translateX(${(D * p).toFixed(1)}px) skewX(${(sk * sg).toFixed(2)}deg)`;
         anims.push(st.animate([
           { transform: tr(0, 0) },
@@ -681,7 +683,7 @@
           { transform: tr(.95, amp * .4), offset: .8 },
           { transform: tr(1, -amp * .15), offset: .92 },
           { transform: tr(1, 0) },
-        ], { duration: 2500, delay: (1 - f) * 380, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'forwards' }));
+        ], { duration: 2900, delay: (1 - f) * 300, easing: 'cubic-bezier(.45,.05,.35,1)', fill: 'forwards' }));
       });
     });
     return anims;
@@ -755,7 +757,7 @@
         const ang = r.r0 + (r.r1 - r.r0) * e;
         st.el.style.transform = `rotate(${ang.toFixed(2)}deg)`;
         let lum = r.o;
-        if (st.off) lum *= OFF_STEPS[Math.min(5, Math.floor((now - st.off) / 100))];
+        if (st.off) lum *= OFF_STEPS[Math.min(5, Math.floor((now - st.off) / 70))];
         if (lum <= 0) continue;
         const x = r.x / 100 * w * k, y = (r.at === 'b' ? h - 3 : 3) * k;
         ctx.setTransform(1, 0, 0, 1, x, y);
@@ -777,7 +779,7 @@
     for (let j = 0; j < ny; j++) pts.push([0, 1 - j / ny]);
     pts.forEach(([x, y], k) => {
       const b = document.createElement('span'); b.className = 'bulb';
-      b.style.left = (x * 100) + '%'; b.style.top = (y * 100) + '%'; b.style.transitionDelay = (k * 22) + 'ms';
+      b.style.left = (x * 100) + '%'; b.style.top = (y * 100) + '%'; b.style.transitionDelay = (k * 12) + 'ms';
       m.appendChild(b);
     });
   }
@@ -787,8 +789,10 @@
     const i = $('#intro'); i.hidden = false; i.className = 'intro'; $('#hush').textContent = ''; entering = false;
     const d = new Date().toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
     $('#m-now').textContent = 'Sala per due · ' + d;
+    // se l'app viene riaperta dal finale, le strisce del sipario tornano al loro posto
+    $('#curtain').querySelectorAll('.s').forEach((st) => st.getAnimations().forEach((a) => a.cancel()));
     buildRigs(); buildBulbs(); paintVelvet();
-    await wait(350); i.classList.add('lit');
+    await wait(60); i.classList.add('lit');
   }
   async function enter() {
     const i = $('#intro');
@@ -796,11 +800,11 @@
     entering = true;
     $('#hush').textContent = 'Spegnete i telefoni, inizia lo spettacolo';
     // i riflettori si spengono a gruppi, poi l'insegna, poi si apre il sipario
-    for (const g of [1, 2, 3]) { rigState.forEach((st) => { if (st.r.g === g) { st.off = performance.now(); st.el.classList.add('off'); } }); await wait(330); }
+    for (const g of [1, 2, 3]) { rigState.forEach((st) => { if (st.r.g === g) { st.off = performance.now(); st.el.classList.add('off'); } }); await wait(120); }
     i.classList.add('dim');
-    await wait(500);
+    await wait(200);
     i.classList.add('open'); openCurtain();
-    await wait(2900); i.classList.add('gone'); await wait(700);
+    await wait(3260); i.classList.add('gone'); await wait(180);
     i.hidden = true;
     // senza accesso la lista resta solo su questo telefono: si chiede subito di accedere
     if (SY.available && !SY.loggedIn) openDlg();

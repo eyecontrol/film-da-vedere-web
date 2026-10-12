@@ -256,14 +256,14 @@ img{-webkit-user-drag:none}
 .rig .lamp::before{content:"";position:absolute;left:3px;right:3px;top:-3px;height:7px;border-radius:50%;
   background:radial-gradient(closest-side,#fff 0 40%,#ffe9c2 60%,rgba(var(--beam),.0) 100%);box-shadow:0 0 14px 6px rgba(var(--beam),.85),0 0 40px 14px rgba(var(--beam),.35)}
 .rig .lamp::after{content:"";position:absolute;left:50%;top:24px;width:6px;height:30px;margin-left:-3px;background:linear-gradient(90deg,#120d0e,#2c2427,#0a0708)}
-.rig.off .beam,.rig.off .lamp::before{animation:lightOff .5s steps(5) forwards}
+.rig.off .beam,.rig.off .lamp::before{animation:lightOff .35s steps(5) forwards}
 @keyframes lightOff{0%{opacity:1}20%{opacity:.2}35%{opacity:.9}55%{opacity:.1}70%{opacity:.5}100%{opacity:0}}
 .rig.off .lamp::before{box-shadow:none}
 
 /* ---------- apertura: riflettori, insegna, sipario ---------- */
 .intro{position:absolute;inset:0;z-index:40;overflow:hidden;overflow:clip;background:#0a0607}
 .stagebg{position:absolute;inset:0;background:radial-gradient(60% 40% at 50% 45%,rgba(242,196,109,.12),transparent 70%),#0a0607}
-.curtain{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;transition:opacity .7s}
+.curtain{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;transition:opacity .18s}
 .intro.gone .curtain{opacity:0}
 /* le due metà del velluto: ondeggiano piano dall'alto e si aprono verso i lati, solo con trasformazioni */
 .curtain .half{position:absolute;top:0;bottom:0;width:50.4%}
@@ -280,19 +280,23 @@ img{-webkit-user-drag:none}
 @keyframes swayL{from{transform:skewX(.5deg)}to{transform:skewX(-.4deg)}}
 @keyframes swayR{from{transform:skewX(-.5deg)}to{transform:skewX(.4deg)}}
 .intro.open .curtain .half{animation:none}
+/* appena il sipario si apre il fondo nero sparisce: dietro le tende si vede già l'app */
+.intro.open{background:transparent;transition:background .25s}
+.intro .stagebg{transition:opacity .25s}
+.intro.open .stagebg{opacity:0}
 .intro .spots{position:absolute;inset:0;pointer-events:none;z-index:6}
 /* i fasci dell'apertura sono disegnati tutti su un'unica tela a bassa risoluzione: un solo livello leggero per la scheda grafica */
 .intro .spots canvas{position:absolute;inset:0;width:100%;height:100%}
 .intro .rig{transform:none}
-.valance{position:absolute;top:0;left:-4%;right:-4%;height:calc(60px + var(--sat));z-index:4;transition:transform 1s cubic-bezier(.6,0,.3,1) 1.4s;
+.valance{position:absolute;top:0;left:-4%;right:-4%;height:calc(60px + var(--sat));z-index:4;transition:transform 1.3s cubic-bezier(.6,0,.3,1) .3s;
   background:linear-gradient(180deg,rgba(0,0,0,.55),transparent 40%,rgba(0,0,0,.2)),repeating-linear-gradient(90deg,#4a0814 0,#9c1f37 3.5%,#c23048 5%,#8a1a30 7%,#3e0610 10%);
   -webkit-mask:radial-gradient(28px 16px at 50% 100%,transparent 98%,#000) 0 0/56px 100% repeat-x;mask:radial-gradient(28px 16px at 50% 100%,transparent 98%,#000) 0 0/56px 100% repeat-x;
   filter:drop-shadow(0 6px 10px rgba(0,0,0,.6))}
-.fringe{position:absolute;top:0;left:-4%;right:-4%;height:calc(60px + var(--sat));z-index:5;pointer-events:none;transition:transform 1s cubic-bezier(.6,0,.3,1) 1.4s;
+.fringe{position:absolute;top:0;left:-4%;right:-4%;height:calc(60px + var(--sat));z-index:5;pointer-events:none;transition:transform 1.3s cubic-bezier(.6,0,.3,1) .3s;
   background:radial-gradient(28px 16px at 50% 100%,transparent 92%,var(--gold-2) 93%,#ffe2a3 96%,transparent 100%) 0 0/56px 100% repeat-x}
 .intro.open .valance,.intro.open .fringe{transform:translateY(-110%)}
-.intro.open .spots{opacity:0;transition:opacity .6s}
-.marquee-wrap{position:absolute;inset:0;z-index:7;display:grid;place-items:center;align-content:center;gap:24px;padding:16px;transition:opacity .6s}
+.intro.open .spots{opacity:0;transition:opacity .4s}
+.marquee-wrap{position:absolute;inset:0;z-index:7;display:grid;place-items:center;align-content:center;gap:24px;padding:16px;transition:opacity .4s}
 .intro.open .marquee-wrap{opacity:0;pointer-events:none}
 .marquee{position:relative;width:min(290px,84%);padding:36px 22px;border-radius:22px;background:linear-gradient(180deg,#2a191e,#120a0d);
   box-shadow:0 0 0 3px #5a4224,0 0 0 5px #2a1c10,0 24px 50px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,220,160,.12);text-align:center;transition:box-shadow .6s}
@@ -311,14 +315,14 @@ img{-webkit-user-drag:none}
 .intro.dim .bulb::before{border-color:rgba(80,60,40,.9);box-shadow:none}
 .m-sub{font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--gold-2);text-transform:uppercase}
 .m-title{font-family:var(--f-logo);font-size:42px;line-height:1;color:#4a3a2c;margin:10px 0}
-.intro.lit .m-title{animation:neon 1.2s .5s both}
+.intro.lit .m-title{animation:neon 1s .3s both}
 @keyframes neon{0%{color:#4a3a2c}10%{color:var(--gold);text-shadow:0 0 18px var(--gold)}14%{color:#4a3a2c;text-shadow:none}22%{color:var(--gold);text-shadow:0 0 18px var(--gold)}26%{color:#6a5236}
   100%{color:#ffe0a0;text-shadow:0 0 10px rgba(255,200,110,.9),0 0 30px rgba(242,196,109,.5),0 0 60px rgba(242,140,50,.3)}}
 .intro.dim .m-title{animation:none;color:#4a3a2c;text-shadow:none;transition:color .5s}
 .m-now{font-size:12px;font-weight:600;color:var(--muted)}
 .enter{border:0;background:linear-gradient(180deg,#ffd98c,var(--gold-2));color:#2b1a08;border-radius:999px;padding:13px 28px;font-weight:700;
-  box-shadow:0 10px 30px rgba(242,196,109,.35);opacity:0;transform:translateY(8px);transition:opacity .5s 1.6s,transform .5s 1.6s}
-.intro.lit .enter{opacity:1;transform:none;animation:invite 2.4s 2.2s ease-in-out infinite}
+  box-shadow:0 10px 30px rgba(242,196,109,.35);opacity:0;transform:translateY(8px);transition:opacity .3s 1.64s,transform .3s 1.64s}
+.intro.lit .enter{opacity:1;transform:none;animation:invite 2.4s 1.94s ease-in-out infinite}
 @keyframes invite{50%{box-shadow:0 10px 40px rgba(242,196,109,.65),0 0 0 6px rgba(242,196,109,.14)}}
 .intro.dim .enter{opacity:0;transition-delay:0s;pointer-events:none;animation:none}
 .hush{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);min-height:18px;text-align:center}
